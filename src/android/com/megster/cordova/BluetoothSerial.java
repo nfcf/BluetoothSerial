@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -84,8 +85,8 @@ public class BluetoothSerial extends CordovaPlugin {
     private String delimiter;
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
-    // Android 23 requires user to explicitly grant permission for location to discover unpaired
-    private static final String[] REQUIRED_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT };
+    private static final String[] REQUIRED_PERMISSIONS_11DOWN = { Manifest.permission.ACCESS_FINE_LOCATION };
+    private static final String[] REQUIRED_PERMISSIONS_12UP = { Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT };
     private static final int CHECK_PERMISSIONS_DISCOVER_REQ_CODE = 2;
     private static final int CHECK_PERMISSIONS_LIST_REQ_CODE = 3;
     private CallbackContext permissionCallback;
@@ -105,13 +106,14 @@ public class BluetoothSerial extends CordovaPlugin {
 
         boolean validAction = true;
 
+        String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? REQUIRED_PERMISSIONS_12UP : REQUIRED_PERMISSIONS_11DOWN;
         if (action.equals(LIST)) {
 
-          if (hasPermisssions(REQUIRED_PERMISSIONS)) {
+          if (hasPermisssions(permissions)) {
             listBondedDevices(callbackContext);
           } else {
             permissionCallback = callbackContext;
-            cordova.requestPermissions(this, CHECK_PERMISSIONS_LIST_REQ_CODE, REQUIRED_PERMISSIONS);
+            cordova.requestPermissions(this, CHECK_PERMISSIONS_LIST_REQ_CODE, permissions);
           }
 
         } else if (action.equals(CONNECT)) {
@@ -219,11 +221,11 @@ public class BluetoothSerial extends CordovaPlugin {
 
         } else if (action.equals(DISCOVER_UNPAIRED)) {
 
-            if (hasPermisssions(REQUIRED_PERMISSIONS)) {
+            if (hasPermisssions(permissions)) {
                 discoverUnpairedDevices(callbackContext);
             } else {
                 permissionCallback = callbackContext;
-                cordova.requestPermissions(this, CHECK_PERMISSIONS_DISCOVER_REQ_CODE, REQUIRED_PERMISSIONS);
+                cordova.requestPermissions(this, CHECK_PERMISSIONS_DISCOVER_REQ_CODE, permissions);
             }
 
         } else if (action.equals(SET_DEVICE_DISCOVERED_LISTENER)) {

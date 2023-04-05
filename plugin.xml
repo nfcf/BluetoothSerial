@@ -62,7 +62,7 @@
 
     </platform>
 
-    <platform name="wp8">
+    <!--<platform name="wp8">
         <config-file target="config.xml" parent="/*">
              <feature name="BluetoothSerial">
                  <param name="wp-package" value="BluetoothSerial"/>
@@ -77,7 +77,7 @@
          <source-file src="src/wp/BluetoothSerial.cs" />
          <source-file src="src/wp/BluetoothConnectionManager.cs" />
 
-    </platform>
+    </platform>-->
 
     <platform name="browser">
         <js-module src="src/browser/bluetoothSerial.js" name="BluetoothSerial_browser">

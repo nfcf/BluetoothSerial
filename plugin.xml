@@ -43,7 +43,7 @@
 
         <config-file target="config.xml" parent="/widget">
             <feature name="BluetoothSerial">
-                <param name="ios-package" value="MEGBluetoothSerial" onload="true"/>
+                <param name="ios-package" value="MEGBluetoothSerial" onload="false"/>
             </feature>
         </config-file>
 
